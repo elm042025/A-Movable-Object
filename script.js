@@ -51,6 +51,36 @@ document.addEventListener("click", (e) => {
    moveableObject.style.top = `${y}px`;
 });
 
+let isDragging = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+moveableObject.addEventListener("mousedown", (e) => {
+   isDragging = true;
+   dragOffsetX = e.clientX - x;
+   dragOffsetY = e.clientY - y;
+   moveableObject.style.cursor = "grabbing";
+});
+
+document.addEventListener("mousemove", (e) => {
+   if (isDragging) {
+      x = Math.max(0, Math.min(e.clientX - dragOffsetX, window.innerWidth - 50));
+      y = Math.max(0, Math.min(e.clientY - dragOffsetY, window.innerHeight - 50));
+      moveableObject.style.left = `${x}px`;
+      moveableObject.style.top = `${y}px`;
+      leaveSmoke(x, y);
+   }
+});
+
+document.addEventListener("mouseup", () => {
+   if (isDragging) {
+      isDragging = false;
+      moveableObject.style.cursor = "grab";
+   }
+});
+
+moveableObject.style.cursor = "grab";
+
 function leaveSmoke(x, y) {
    const smoke = document.createElement("div");
    smoke.className = "smoke";
