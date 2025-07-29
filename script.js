@@ -29,18 +29,28 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener("click", (e) => {
-   // Calculate max positions to keep the box inside the viewport
-   const maxX = window.innerWidth - 50; // 50 = width of the object
-   const maxY = window.innerHeight - 50; // 50 = height of the object
+   const maxX = window.innerWidth - 50;
+   const maxY = window.innerHeight - 50;
 
-   // Clamp the positions
-   let x = Math.max(0, Math.min(e.clientX - 25, maxX));
-   let y = Math.max(0, Math.min(e.clientY - 25, maxY));
+   const newX = Math.max(0, Math.min(e.clientX - 25, maxX));
+   const newY = Math.max(0, Math.min(e.clientY - 25, maxY));
 
+   // Trail settings:
+   const steps = Math.max(Math.abs(newX - x), Math.abs(newY - y)) / 25; // adjust "10" for trail density
+
+   for (let i = 0; i <= steps; i++) {
+      const trailX = x + ((newX - x) * i) / steps;
+      const trailY = y + ((newY - y) * i) / steps;
+      leaveSmoke(trailX, trailY);
+   }
+
+   // Move the object to the new position (and update x/y)
+   x = newX;
+   y = newY;
    moveableObject.style.left = `${x}px`;
    moveableObject.style.top = `${y}px`;
-   leaveSmoke(x, y);
 });
+
 function leaveSmoke(x, y) {
    const smoke = document.createElement("div");
    smoke.className = "smoke";
