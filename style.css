@@ -19,7 +19,7 @@ body {
    /* transition: all 0.2s ease; */
 }
 
-.smoke {
+.trail {
    position: absolute;
    width: 3rem;
    height: 3rem;

@@ -8,22 +8,22 @@ document.addEventListener("keydown", (e) => {
       case "ArrowUp":
          y = Math.max(0, y - 25);
          moveableObject.style.top = `${y}px`;
-         leaveSmoke(x, y); // Leave smoke when moving up
+         leaveTrail(x, y); // Leave trail when moving up
          break;
       case "ArrowDown":
          y = Math.min(window.innerHeight - 50, y + 25);
          moveableObject.style.top = `${y}px`;
-         leaveSmoke(x, y); // Leave smoke when moving down
+         leaveTrail(x, y); // Leave trail when moving down
          break;
       case "ArrowLeft":
          x = Math.max(0, x - 25);
          moveableObject.style.left = `${x}px`;
-         leaveSmoke(x, y); // Leave smoke when moving left
+         leaveTrail(x, y); // Leave trail when moving left
          break;
       case "ArrowRight":
          x = Math.min(window.innerWidth - 50, x + 25);
          moveableObject.style.left = `${x}px`;
-         leaveSmoke(x, y); // Leave smoke when moving right
+         leaveTrail(x, y); // Leave trail when moving right
          break;
    }
 });
@@ -41,7 +41,7 @@ document.addEventListener("click", (e) => {
    for (let i = 0; i <= steps; i++) {
       const trailX = x + ((newX - x) * i) / steps;
       const trailY = y + ((newY - y) * i) / steps;
-      leaveSmoke(trailX, trailY);
+      leaveTrail(trailX, trailY);
    }
 
    // Move the object to the new position (and update x/y)
@@ -68,7 +68,7 @@ document.addEventListener("mousemove", (e) => {
       y = Math.max(0, Math.min(e.clientY - dragOffsetY, window.innerHeight - 50));
       moveableObject.style.left = `${x}px`;
       moveableObject.style.top = `${y}px`;
-      leaveSmoke(x, y);
+      leaveTrail(x, y);
    }
 });
 
@@ -80,23 +80,23 @@ document.addEventListener("mouseup", () => {
 });
 
 moveableObject.style.cursor = "grab";
-
-function leaveSmoke(x, y) {
-   const smoke = document.createElement("div");
-   smoke.className = "smoke";
-   smoke.style.left = x + "px";
-   smoke.style.top = y + "px";
+//! --------- Change to "leaveTrail" to leave a trail instead of smoke ---------
+function leaveTrail(x, y) {
+   const trail = document.createElement("div");
+   trail.className = "trail";
+   trail.style.left = x + "px";
+   trail.style.top = y + "px";
    // Random color!
-   smoke.style.background = `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`;
-   document.body.appendChild(smoke);
+   trail.style.background = `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`;
+   document.body.appendChild(trail);
 
    // Fade out after a short delay
    setTimeout(() => {
-      smoke.style.opacity = 0;
+      trail.style.opacity = 0;
    }, 100); // Start fade after 100ms
 
    // Remove from DOM after fade (e.g. after 2s)
    setTimeout(() => {
-      smoke.remove();
-   }, 2000);
+      trail.remove();
+   }, 1000);
 }
